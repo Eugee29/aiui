@@ -1,6 +1,6 @@
 'use client'
 
-import { generateFormSchema, queuePrompt } from '@/app/actions'
+import { queuePrompt } from '@/app/actions'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -15,13 +15,18 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { v4 as uuidv4 } from 'uuid'
-import WebSocket from 'ws'
 import { z } from 'zod'
+
+const FormSchema = z.object({
+  prompt: z.string().min(1, {
+    message: 'Please enter a prompt',
+  }),
+})
 
 export default function GenerateForm() {
   const clientId = useRef(uuidv4())
-  const form = useForm<z.infer<typeof generateFormSchema>>({
-    resolver: zodResolver(generateFormSchema),
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
     defaultValues: {
       prompt: '',
     },
@@ -29,18 +34,19 @@ export default function GenerateForm() {
 
   useEffect(() => {
     const ws = new WebSocket(
-      `ws://${process.env.COMFY_SERVER_URL}/ws?clientId=${clientId}`
+      `ws://${process.env.NEXT_PUBLIC_COMFY_SERVER_URL}/ws?clientId=${clientId.current}`
     )
-
-    ws.on('open', () => {
-      console.log('Connected to server')
-      ws.on('message', (data) => {
-        console.log('Received data:', data)
-      })
-    })
+    ws.onopen = () => {
+      ws.onmessage = ({ data }) => {
+        const parsedData = JSON.parse(data)
+        if (parsedData.type === 'progress') {
+          console.log(`${parsedData.data.value}/${parsedData.data.max}`)
+        }
+      }
+    }
   }, [])
 
-  function onSubmit(values: z.infer<typeof generateFormSchema>) {
+  function onSubmit(values: z.infer<typeof FormSchema>) {
     queuePrompt(values.prompt, clientId.current)
   }
 
