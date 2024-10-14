@@ -24,7 +24,7 @@ const FormSchema = z.object({
 })
 
 export default function GenerateForm() {
-  const clientId = useRef(uuidv4())
+  const { current: clientId } = useRef(uuidv4())
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -34,7 +34,7 @@ export default function GenerateForm() {
 
   useEffect(() => {
     const ws = new WebSocket(
-      `ws://${process.env.NEXT_PUBLIC_COMFY_SERVER_URL}/ws?clientId=${clientId.current}`
+      `ws://${process.env.NEXT_PUBLIC_COMFY_SERVER_URL}/ws?clientId=${clientId}`
     )
     ws.onopen = () => {
       ws.onmessage = ({ data }) => {
@@ -44,10 +44,14 @@ export default function GenerateForm() {
         }
       }
     }
+
+    return () => {
+      ws.close()
+    }
   }, [])
 
   function onSubmit(values: z.infer<typeof FormSchema>) {
-    queuePrompt(values.prompt, clientId.current)
+    queuePrompt(values.prompt, clientId)
   }
 
   return (
