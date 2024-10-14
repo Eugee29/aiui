@@ -44,11 +44,7 @@ export default function GenerateForm() {
         }
       }
     }
-
-    return () => {
-      ws.close()
-    }
-  }, [])
+  }, [clientId])
 
   function onSubmit(values: z.infer<typeof FormSchema>) {
     queuePrompt(values.prompt, clientId)
