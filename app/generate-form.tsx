@@ -36,14 +36,15 @@ export default function GenerateForm() {
     const ws = new WebSocket(
       `ws://${process.env.NEXT_PUBLIC_COMFY_SERVER_URL}/ws?clientId=${clientId}`
     )
-    ws.onopen = () => {
-      ws.onmessage = ({ data }) => {
-        const parsedData = JSON.parse(data)
-        if (parsedData.type === 'progress') {
-          console.log(`${parsedData.data.value}/${parsedData.data.max}`)
-        }
+
+    ws.onmessage = ({ data }) => {
+      const parsedData = JSON.parse(data)
+      if (parsedData.type === 'progress') {
+        console.log(`${parsedData.data.value}/${parsedData.data.max}`)
       }
     }
+
+    return () => ws.close()
   }, [clientId])
 
   function onSubmit(values: z.infer<typeof FormSchema>) {
