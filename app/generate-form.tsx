@@ -11,6 +11,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
+import { COMFY_SERVER_URL } from '@/lib/constants'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
@@ -35,9 +36,7 @@ export default function GenerateForm() {
   })
 
   useEffect(() => {
-    const ws = new WebSocket(
-      `ws://${process.env.NEXT_PUBLIC_COMFY_SERVER_URL}/ws?clientId=${clientId}`
-    )
+    const ws = new WebSocket(`ws://${COMFY_SERVER_URL}/ws?clientId=${clientId}`)
 
     const reader = new FileReader()
 
@@ -102,9 +101,9 @@ export default function GenerateForm() {
         <Image
           src={output}
           alt="output"
-          width={512}
-          height={512}
-          className="size-[512px]"
+          width={768}
+          height={768}
+          className="size-[768px] object-contain"
         />
       )}
     </>

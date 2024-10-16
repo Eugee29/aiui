@@ -23,7 +23,10 @@
   "8": {
     "inputs": {
       "guidance": 3.5,
-      "conditioning": ["62", 0]
+      "conditioning": [
+        "62",
+        0
+      ]
     },
     "class_type": "FluxGuidance",
     "_meta": {
@@ -44,7 +47,10 @@
       "scheduler": "sgm_uniform",
       "steps": 25,
       "denoise": 1,
-      "model": ["5", 0]
+      "model": [
+        "5",
+        0
+      ]
     },
     "class_type": "BasicScheduler",
     "_meta": {
@@ -62,7 +68,10 @@
   },
   "20": {
     "inputs": {
-      "model": ["5", 0]
+      "model": [
+        "5",
+        0
+      ]
     },
     "class_type": "DifferentialDiffusion",
     "_meta": {
@@ -71,7 +80,7 @@
   },
   "22": {
     "inputs": {
-      "noise_seed": 506803881373791
+      "noise_seed": 495554546156990
     },
     "class_type": "RandomNoise",
     "_meta": {
@@ -80,11 +89,26 @@
   },
   "23": {
     "inputs": {
-      "noise": ["22", 0],
-      "guider": ["24", 0],
-      "sampler": ["19", 0],
-      "sigmas": ["16", 0],
-      "latent_image": ["30", 0]
+      "noise": [
+        "22",
+        0
+      ],
+      "guider": [
+        "24",
+        0
+      ],
+      "sampler": [
+        "19",
+        0
+      ],
+      "sigmas": [
+        "16",
+        0
+      ],
+      "latent_image": [
+        "30",
+        0
+      ]
     },
     "class_type": "SamplerCustomAdvanced",
     "_meta": {
@@ -93,8 +117,14 @@
   },
   "24": {
     "inputs": {
-      "model": ["5", 0],
-      "conditioning": ["8", 0]
+      "model": [
+        "5",
+        0
+      ],
+      "conditioning": [
+        "8",
+        0
+      ]
     },
     "class_type": "BasicGuider",
     "_meta": {
@@ -103,8 +133,14 @@
   },
   "25": {
     "inputs": {
-      "samples": ["23", 0],
-      "vae": ["10", 0]
+      "samples": [
+        "23",
+        0
+      ],
+      "vae": [
+        "10",
+        0
+      ]
     },
     "class_type": "VAEDecode",
     "_meta": {
@@ -113,7 +149,10 @@
   },
   "26": {
     "inputs": {
-      "images": ["25", 0]
+      "images": [
+        "25",
+        0
+      ]
     },
     "class_type": "PreviewImage",
     "_meta": {
@@ -132,22 +171,28 @@
   },
   "62": {
     "inputs": {
-      "text": "",
-      "clip": ["6", 0]
+      "text": "banana on a couch",
+      "clip": [
+        "6",
+        0
+      ]
     },
     "class_type": "CLIPTextEncode",
     "_meta": {
       "title": "CLIP Text Encode (Prompt)"
     }
   },
-  "63": {
+  "64": {
     "inputs": {
-      "filename_prefix": "ComfyUI",
-      "images": ["25", 0]
+      "format": "PNG",
+      "images": [
+        "25",
+        0
+      ]
     },
-    "class_type": "SaveImage",
+    "class_type": "ETN_SendImageWebSocket",
     "_meta": {
-      "title": "Save Image"
+      "title": "Send Image (WebSocket)"
     }
   }
 }
