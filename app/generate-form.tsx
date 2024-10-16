@@ -99,10 +99,12 @@ export default function GenerateForm() {
       </Form>
       {output && (
         <Image
+          priority
+          quality={100}
           src={output}
           alt="output"
-          width={768}
-          height={768}
+          width={1024}
+          height={1024}
           className="size-[768px] object-contain"
         />
       )}

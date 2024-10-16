@@ -182,17 +182,16 @@
       "title": "CLIP Text Encode (Prompt)"
     }
   },
-  "64": {
+  "65": {
     "inputs": {
-      "format": "PNG",
       "images": [
         "25",
         0
       ]
     },
-    "class_type": "ETN_SendImageWebSocket",
+    "class_type": "SaveImageWebsocket",
     "_meta": {
-      "title": "Send Image (WebSocket)"
+      "title": "SaveImageWebsocket"
     }
   }
 }
