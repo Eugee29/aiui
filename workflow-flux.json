@@ -23,10 +23,7 @@
   "8": {
     "inputs": {
       "guidance": 3.5,
-      "conditioning": [
-        "62",
-        0
-      ]
+      "conditioning": ["62", 0]
     },
     "class_type": "FluxGuidance",
     "_meta": {
@@ -47,10 +44,7 @@
       "scheduler": "sgm_uniform",
       "steps": 25,
       "denoise": 1,
-      "model": [
-        "5",
-        0
-      ]
+      "model": ["5", 0]
     },
     "class_type": "BasicScheduler",
     "_meta": {
@@ -68,10 +62,7 @@
   },
   "20": {
     "inputs": {
-      "model": [
-        "5",
-        0
-      ]
+      "model": ["5", 0]
     },
     "class_type": "DifferentialDiffusion",
     "_meta": {
@@ -89,26 +80,11 @@
   },
   "23": {
     "inputs": {
-      "noise": [
-        "22",
-        0
-      ],
-      "guider": [
-        "24",
-        0
-      ],
-      "sampler": [
-        "19",
-        0
-      ],
-      "sigmas": [
-        "16",
-        0
-      ],
-      "latent_image": [
-        "30",
-        0
-      ]
+      "noise": ["22", 0],
+      "guider": ["24", 0],
+      "sampler": ["19", 0],
+      "sigmas": ["16", 0],
+      "latent_image": ["30", 0]
     },
     "class_type": "SamplerCustomAdvanced",
     "_meta": {
@@ -117,14 +93,8 @@
   },
   "24": {
     "inputs": {
-      "model": [
-        "5",
-        0
-      ],
-      "conditioning": [
-        "8",
-        0
-      ]
+      "model": ["5", 0],
+      "conditioning": ["8", 0]
     },
     "class_type": "BasicGuider",
     "_meta": {
@@ -133,14 +103,8 @@
   },
   "25": {
     "inputs": {
-      "samples": [
-        "23",
-        0
-      ],
-      "vae": [
-        "10",
-        0
-      ]
+      "samples": ["23", 0],
+      "vae": ["10", 0]
     },
     "class_type": "VAEDecode",
     "_meta": {
@@ -149,10 +113,7 @@
   },
   "26": {
     "inputs": {
-      "images": [
-        "25",
-        0
-      ]
+      "images": ["25", 0]
     },
     "class_type": "PreviewImage",
     "_meta": {
@@ -161,7 +122,7 @@
   },
   "30": {
     "inputs": {
-      "resolution": "1280 x 768 (1.67)",
+      "resolution": "1024 x 1024 (1.00)",
       "batch_size": 1
     },
     "class_type": "SDXL Empty Latent Image",
@@ -172,10 +133,7 @@
   "62": {
     "inputs": {
       "text": "banana on a couch",
-      "clip": [
-        "6",
-        0
-      ]
+      "clip": ["6", 0]
     },
     "class_type": "CLIPTextEncode",
     "_meta": {
@@ -184,10 +142,7 @@
   },
   "65": {
     "inputs": {
-      "images": [
-        "25",
-        0
-      ]
+      "images": ["25", 0]
     },
     "class_type": "SaveImageWebsocket",
     "_meta": {

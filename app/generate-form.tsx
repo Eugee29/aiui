@@ -103,8 +103,9 @@ export default function GenerateForm() {
           quality={100}
           src={output}
           alt="output"
-          width={1024}
-          height={1024}
+          width={0}
+          height={0}
+          sizes="100vw"
           className="size-[768px] object-contain"
         />
       )}
