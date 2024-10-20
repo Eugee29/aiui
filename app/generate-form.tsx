@@ -35,7 +35,7 @@ export default function GenerateForm() {
   })
 
   useEffect(() => {
-    const eventSource = new EventSource(`/api/generation-event/${clientId}`)
+    const eventSource = new EventSource(`/api/generation-events/${clientId}`)
     eventSource.onmessage = (event) => {
       const generationEvent: GenerationEvent = JSON.parse(event.data)
       if (generationEvent.type === 'preview') {
