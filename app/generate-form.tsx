@@ -35,11 +35,11 @@ export default function GenerateForm() {
   })
 
   useEffect(() => {
-    const eventSource = new EventSource(`/api/progress/${clientId}`)
+    const eventSource = new EventSource(`/api/generation-event/${clientId}`)
     eventSource.onmessage = (event) => {
-      const progressEvent: GenerationEvent = JSON.parse(event.data)
-      if (progressEvent.type === 'preview') {
-        setOutput(progressEvent.data)
+      const generationEvent: GenerationEvent = JSON.parse(event.data)
+      if (generationEvent.type === 'preview') {
+        setOutput(generationEvent.data)
       }
     }
   }, [])
