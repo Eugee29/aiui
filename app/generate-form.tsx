@@ -11,7 +11,6 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
-import { clientId } from '@/lib/constants'
 import { GenerationEvent } from '@/lib/definitions'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
@@ -35,9 +34,12 @@ export default function GenerateForm() {
   })
 
   useEffect(() => {
-    const eventSource = new EventSource(`/api/generation-events/${clientId}`)
+    const eventSource = new EventSource('/api/generation-events/')
     eventSource.onmessage = (event) => {
       const generationEvent: GenerationEvent = JSON.parse(event.data)
+      if (generationEvent.type === 'debug') {
+        console.log(generationEvent.data)
+      }
       if (generationEvent.type === 'preview') {
         setOutput(generationEvent.data)
       }
@@ -45,7 +47,7 @@ export default function GenerateForm() {
   }, [])
 
   async function onSubmit(values: z.infer<typeof FormSchema>) {
-    queuePrompt(values.prompt, clientId)
+    queuePrompt(values.prompt)
   }
 
   return (

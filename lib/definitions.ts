@@ -7,3 +7,5 @@ export type ComfyResponse = {
 export type GenerationEvent =
   | { type: 'progress'; data: number }
   | { type: 'preview'; data: string }
+  | { type: 'execution-start'; data: { prompt: string } }
+  | { type: 'debug'; data: unknown }

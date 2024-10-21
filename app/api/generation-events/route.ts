@@ -1,10 +1,9 @@
-import { COMFY_SERVER_URL } from '@/lib/constants'
+import { clientId, COMFY_SERVER_URL } from '@/lib/constants'
 import { GenerationEvent } from '@/lib/definitions'
 import { NextResponse } from 'next/server'
 import WebSocket from 'ws'
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
-  const clientId = params.id
+export async function GET() {
   const ws = new WebSocket(`ws://${COMFY_SERVER_URL}/ws?clientId=${clientId}`)
 
   ws.on('error', (error) => {
@@ -30,14 +29,25 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
           } else {
             const parsedData = JSON.parse(data.toString())
 
-            if (parsedData.type === 'progress') {
-              progressEvent = {
-                type: 'progress',
-                data: Math.round(
-                  (parsedData.data.value / parsedData.data.max) * 100
-                ),
-              }
+            switch (parsedData.type) {
+              case 'progress':
+                progressEvent = {
+                  type: 'progress',
+                  data: Math.round(
+                    (parsedData.data.value / parsedData.data.max) * 100
+                  ),
+                }
+                break
             }
+          }
+
+          if (process.env.NODE_ENV === 'development') {
+            const debugData: GenerationEvent = {
+              type: 'debug',
+              data: isBinary ? data : JSON.parse(data.toString()),
+            }
+            const message = `data: ${JSON.stringify(debugData)}\n\n`
+            controller.enqueue(encoder.encode(message))
           }
 
           if (progressEvent) {
@@ -53,6 +63,8 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
     {
       headers: {
         'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        Connection: 'keep-alive',
       },
     }
   )
