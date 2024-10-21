@@ -37,8 +37,8 @@ export default function GenerateForm() {
     const eventSource = new EventSource('/api/generation-events/')
     eventSource.onmessage = (event) => {
       const generationEvent: GenerationEvent = JSON.parse(event.data)
-      if (generationEvent.type === 'debug') {
-        console.log(generationEvent.data)
+      if (generationEvent.type !== 'debug') {
+        console.log(generationEvent)
       }
       if (generationEvent.type === 'preview') {
         setOutput(generationEvent.data)

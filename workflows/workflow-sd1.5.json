@@ -12,7 +12,7 @@
     "inputs": {
       "width": 256,
       "height": 256,
-      "batch_size": 3
+      "batch_size": 1
     },
     "class_type": "EmptyLatentImage",
     "_meta": {
@@ -22,10 +22,7 @@
   "6": {
     "inputs": {
       "text": "banana on a couch",
-      "clip": [
-        "4",
-        1
-      ]
+      "clip": ["4", 1]
     },
     "class_type": "CLIPTextEncode",
     "_meta": {
@@ -35,10 +32,7 @@
   "7": {
     "inputs": {
       "text": "text, watermark",
-      "clip": [
-        "4",
-        1
-      ]
+      "clip": ["4", 1]
     },
     "class_type": "CLIPTextEncode",
     "_meta": {
@@ -47,14 +41,8 @@
   },
   "8": {
     "inputs": {
-      "samples": [
-        "24",
-        0
-      ],
-      "vae": [
-        "4",
-        2
-      ]
+      "samples": ["24", 0],
+      "vae": ["4", 2]
     },
     "class_type": "VAEDecode",
     "_meta": {
@@ -63,10 +51,7 @@
   },
   "23": {
     "inputs": {
-      "images": [
-        "8",
-        0
-      ]
+      "images": ["8", 0]
     },
     "class_type": "SaveImageWebsocket",
     "_meta": {
@@ -76,27 +61,15 @@
   "24": {
     "inputs": {
       "seed": 457320563957391,
-      "steps": 20,
+      "steps": 5,
       "cfg": 8,
       "sampler_name": "euler",
       "scheduler": "normal",
       "denoise": 1,
-      "model": [
-        "4",
-        0
-      ],
-      "positive": [
-        "6",
-        0
-      ],
-      "negative": [
-        "7",
-        0
-      ],
-      "latent_image": [
-        "5",
-        0
-      ]
+      "model": ["4", 0],
+      "positive": ["6", 0],
+      "negative": ["7", 0],
+      "latent_image": ["5", 0]
     },
     "class_type": "KSampler",
     "_meta": {

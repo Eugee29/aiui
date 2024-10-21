@@ -5,7 +5,10 @@ export type ComfyResponse = {
 }
 
 export type GenerationEvent =
+  | {
+      type: 'execution-start'
+      data: { id: string; batchSize: number; prompt: string }
+    }
   | { type: 'progress'; data: number }
   | { type: 'preview'; data: string }
-  | { type: 'execution-start'; data: { prompt: string } }
   | { type: 'debug'; data: unknown }

@@ -1,5 +1,6 @@
 import { clientId, COMFY_SERVER_URL } from '@/lib/constants'
 import { GenerationEvent } from '@/lib/definitions'
+import axios from 'axios'
 import { NextResponse } from 'next/server'
 import WebSocket from 'ws'
 
@@ -16,11 +17,11 @@ export async function GET() {
       start: async (controller) => {
         const encoder = new TextEncoder()
 
-        ws.on('message', (data, isBinary) => {
-          let progressEvent: GenerationEvent | null = null
+        ws.on('message', async (data, isBinary) => {
+          let generationEvent: GenerationEvent | null = null
 
           if (isBinary) {
-            progressEvent = {
+            generationEvent = {
               type: 'preview',
               data: `data:image/png;base64,${(data.slice(8) as Buffer).toString(
                 'base64'
@@ -31,13 +32,27 @@ export async function GET() {
 
             switch (parsedData.type) {
               case 'progress':
-                progressEvent = {
+                generationEvent = {
                   type: 'progress',
                   data: Math.round(
                     (parsedData.data.value / parsedData.data.max) * 100
                   ),
                 }
                 break
+              case 'execution_start':
+                const res = await axios.get(`http://${COMFY_SERVER_URL}/queue`)
+                const queues = res.data
+                const currentJob = queues.queue_running[0]
+                const jobId = currentJob[1]
+                const workflow = currentJob[2]
+                generationEvent = {
+                  type: 'execution-start',
+                  data: {
+                    id: jobId,
+                    prompt: workflow[6].inputs.text,
+                    batchSize: workflow[5].inputs.batch_size,
+                  },
+                }
             }
           }
 
@@ -50,8 +65,8 @@ export async function GET() {
             controller.enqueue(encoder.encode(message))
           }
 
-          if (progressEvent) {
-            const message = `data: ${JSON.stringify(progressEvent)}\n\n`
+          if (generationEvent) {
+            const message = `data: ${JSON.stringify(generationEvent)}\n\n`
             controller.enqueue(encoder.encode(message))
           }
         })
