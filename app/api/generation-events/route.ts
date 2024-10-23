@@ -1,4 +1,4 @@
-import { clientId, COMFY_SERVER_URL } from '@/lib/constants'
+import { clientId, COMFY_SERVER_URL, workflow } from '@/lib/constants'
 import { GenerationEvent } from '@/lib/definitions'
 import axios from 'axios'
 import { NextResponse } from 'next/server'
@@ -44,13 +44,13 @@ export async function GET() {
                 const queues = res.data
                 const currentJob = queues.queue_running[0]
                 const jobId = currentJob[1]
-                const workflow = currentJob[2]
+                const currentWorkflow: typeof workflow = currentJob[2]
                 generationEvent = {
                   type: 'execution-start',
                   data: {
                     id: jobId,
-                    prompt: workflow[6].inputs.text,
-                    batchSize: workflow[5].inputs.batch_size,
+                    prompt: currentWorkflow[6].inputs.text,
+                    batchSize: currentWorkflow[135].inputs.batch_size,
                   },
                 }
             }

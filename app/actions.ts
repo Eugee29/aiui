@@ -1,13 +1,15 @@
 'use server'
 
-import { clientId, COMFY_SERVER_URL } from '@/lib/constants'
+import { clientId, COMFY_SERVER_URL, workflow } from '@/lib/constants'
 import { ComfyResponse } from '@/lib/definitions'
-import workflow from '@/workflows/workflow-sd1.5.json'
+import { FormSchema } from '@/lib/schemas'
 import axios from 'axios'
+import { z } from 'zod'
 
-export async function queuePrompt(prompt: string) {
-  workflow['6']['inputs']['text'] = prompt
-  workflow['24']['inputs']['seed'] = Math.random() * 1000
+export async function queuePrompt(params: z.infer<typeof FormSchema>) {
+  workflow['6']['inputs']['text'] = params.prompt
+  workflow['135']['inputs']['batch_size'] = params.batchSize
+  workflow['294']['inputs']['seed'] = Math.random() * 1000
 
   try {
     const res = await axios.post<ComfyResponse>(
