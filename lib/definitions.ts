@@ -12,3 +12,4 @@ export type GenerationEvent =
   | { type: 'progress'; data: number }
   | { type: 'preview'; data: string }
   | { type: 'debug'; data: unknown }
+  | { type: 'execution-success'; data: string[] }

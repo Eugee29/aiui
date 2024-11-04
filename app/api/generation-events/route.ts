@@ -16,21 +16,32 @@ export async function GET() {
     new ReadableStream({
       start: async (controller) => {
         const encoder = new TextEncoder()
+        const outputImages: string[] = []
+        let currentNode: null | keyof typeof workflow = null
 
         ws.on('message', async (data, isBinary) => {
           let generationEvent: GenerationEvent | null = null
 
           if (isBinary) {
-            generationEvent = {
-              type: 'preview',
-              data: `data:image/png;base64,${(data.slice(8) as Buffer).toString(
-                'base64'
-              )}`,
-            }
+            if (currentNode === 'saveImageWebsocket')
+              outputImages.push((data.slice(8) as Buffer).toString('base64'))
+
+            if (currentNode === 'KSampler')
+              generationEvent = {
+                type: 'preview',
+                data: `data:image/png;base64,${(
+                  data.slice(8) as Buffer
+                ).toString('base64')}`,
+              }
           } else {
             const parsedData = JSON.parse(data.toString())
 
             switch (parsedData.type) {
+              case 'executing':
+                currentNode = parsedData.data.node
+                if (!currentNode) outputImages.length = 0
+                break
+
               case 'progress':
                 generationEvent = {
                   type: 'progress',
@@ -39,6 +50,7 @@ export async function GET() {
                   ),
                 }
                 break
+
               case 'execution_start':
                 const res = await axios.get(`http://${COMFY_SERVER_URL}/queue`)
                 const queues = res.data
@@ -50,8 +62,17 @@ export async function GET() {
                   data: {
                     id: jobId,
                     prompt: currentWorkflow[6].inputs.text,
-                    batchSize: currentWorkflow[135].inputs.batch_size,
+                    batchSize: currentWorkflow[5].inputs.batch_size,
                   },
+                }
+                break
+
+              case 'execution_success':
+                generationEvent = {
+                  type: 'execution-success',
+                  data: outputImages.map(
+                    (image) => `data:image/png;base64,${image}`
+                  ),
                 }
             }
           }

@@ -32,14 +32,14 @@ export default function GenerateForm() {
     },
   })
 
-  async function onSubmit(values: z.infer<typeof FormSchema>) {
-    queuePrompt(values)
-  }
+  // const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+  //   queuePrompt(data)
+  // }
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(queuePrompt)}
         className="self-center p-4 border bg-card rounded w-96 space-y-4"
       >
         <FormField
@@ -64,6 +64,7 @@ export default function GenerateForm() {
           name="batchSize"
           render={({ field }) => (
             <FormItem>
+              <FormLabel>Batch size</FormLabel>
               <FormControl>
                 <Select
                   onValueChange={field.onChange}

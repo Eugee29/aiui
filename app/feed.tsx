@@ -22,10 +22,16 @@ export default function Feed() {
 
       if (generationEvent.type === 'preview') {
         // TODO...
-        setsOutputs([])
+        setsOutputs([generationEvent.data])
+      }
+
+      if (generationEvent.type === 'execution-success') {
+        setsOutputs(generationEvent.data)
       }
     }
-  }, [, batchSize, outputs])
+
+    return () => eventSource.close()
+  }, [batchSize, outputs])
 
   return (
     <div className="grid gap-4 grid-cols-4">
